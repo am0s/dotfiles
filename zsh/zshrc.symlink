@@ -59,12 +59,12 @@ plugins=(git svn python pip virtualenv fabric perl themes)
 setopt extendedglob
 
 # Append extra bin folders to PATH if they exist
-if [ -e "$HOME/bin" ]; then
-    export PATH="$PATH:$HOME/bin"
+if [ -d "$HOME/bin" ]; then
+    export PATH="$HOME/bin:$PATH"
 fi
 
-if [ -e "$HOME/dotfiles/bin" ]; then
-    export PATH="$PATH:$HOME/dotfiles/bin"
+if [ -d "$HOME/dotfiles/bin" ]; then
+    export PATH="$HOME/dotfiles/bin:PATH"
 fi
 
 # Start oh my zsh
