@@ -1,0 +1,2 @@
+forward_agent = 1
+use_ssh_config = 1
