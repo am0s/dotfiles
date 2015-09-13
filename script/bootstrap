@@ -152,6 +152,16 @@ then
   fi
 fi
 
+# Bootstrap according to system.
+
+SYSTEM="$(uname -s | tr '[:upper:]' '[:lower:]')"
+echo $SYSTEM
+if [ -f "${SYSTEM}/bootstrap.sh" ]; then
+    source "${SYSTEM}/bootstrap.sh"
+fi
+
+find . -name "bootstrap.${SYSTEM}.sh" | while read installer ; do sh -c "${installer}" ; done
+
 echo ''
 echo '  All installed!'
 
