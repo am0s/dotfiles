@@ -118,7 +118,7 @@ zplug "junegunn/fzf-bin", \
     from:gh-r, \
     file:fzf, \
     of:"*linux*amd64*"
-zplug "b4b4r07/enhancd", as:command, of:enhancd.sh
+zplug "b4b4r07/enhancd", of:enhancd.sh
 zplug "zsh-users/zaw"
 
 
@@ -155,6 +155,8 @@ fi
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
+
+export ENHANCD_FILTER=peco
 
 # Customize to your needs...
 
