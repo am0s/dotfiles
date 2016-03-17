@@ -38,6 +38,8 @@ zplug "plugins/svn",   from:oh-my-zsh, if:"which svn"
 zplug "plugins/fabric",   from:oh-my-zsh, if:"which fabric"
 zplug "plugins/composer",   from:oh-my-zsh, if:"which php"
 
+zplug "zsh-users/zsh-syntax-highlighting"
+
 # Directory listings for zsh with git features
 zplug "supercrabtree/k"
 
