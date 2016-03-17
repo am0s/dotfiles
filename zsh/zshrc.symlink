@@ -73,6 +73,18 @@ bindkey '\ek' deer
 #DEER_KEYS[page_up]=E
 #DEER_KEYS[enter]=^M
 
+#zplug "joepvd/zsh-hints", of:zsh-hints
+
+#zle -N zsh-hints-param zsh-hints
+#bindkey "^Xp" zsh-hints-param
+#zle -N zsh-hints-paramflags zsh-hints
+#bindkey "^Xf" zsh-hints-paramflags
+#zle -N zsh-hints-glob zsh-hints
+#bindkey "^Xg" zsh-hints-glob
+
+
+# Make mysql client use colors
+zplug "horosgrisa/mysql-colorize", of:mysql-colorize.plugin.zsh
 
 # Theme
 
