@@ -121,6 +121,22 @@ zplug "junegunn/fzf-bin", \
 zplug "b4b4r07/enhancd", of:enhancd.sh
 zplug "zsh-users/zaw"
 
+# File navigation tool, alt+k
+zplug "Vifon/deer", \
+    of:deer
+
+zle -N deer
+bindkey '\ek' deer
+
+## Rebind keys for 'deer'
+#typeset -Ag DEER_KEYS
+#
+#DEER_KEYS[down]=^[OB
+#DEER_KEYS[page_down]=N
+#DEER_KEYS[up]=up
+#DEER_KEYS[page_up]=E
+#DEER_KEYS[enter]=^M
+
 
 # Theme
 
