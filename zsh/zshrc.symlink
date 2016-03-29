@@ -1,5 +1,6 @@
 DISABLE_AUTO_UPDATE="true"
 ZSH_THEME="bira"
+export DISABLE_AUTO_TITLE='true'
 
 setopt extendedglob
 
