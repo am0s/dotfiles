@@ -42,6 +42,13 @@ set -g mouse-resize-pane on
 
 set -g history-limit 10000
 
+# https://gist.github.com/admackin/4507371
+# fix ssh agent when tmux is detached
+# See .ssh/rc for socket linking
+set -g update-environment -r
+setenv -g SSH_AUTH_SOCK $HOME/.ssh/ssh_auth_sock
+
+# fix ssh agent when tmux is detached
 setenv -g SSH_AUTH_SOCK $HOME/.ssh/ssh_auth_sock
 
 
