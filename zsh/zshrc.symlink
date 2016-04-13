@@ -119,6 +119,8 @@ zplug load
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+# Local plugins
+source ~/.dotfiles_root/zsh/plugins/env/env.plugin.zsh
 
 # Check for post setup
 if zplug check b4b4r07/enhancd; then

@@ -144,6 +144,8 @@ install_dotfiles () {
 
   local overwrite_all=false backup_all=false skip_all=false
 
+  link_file "$DOTFILES_ROOT" "$HOME/.dotfiles_root"
+
   for src in $(find -H "$DOTFILES_ROOT" -name '*.symlink')
   do
     dotfile=${src%.*}
