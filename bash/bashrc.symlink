@@ -5,6 +5,12 @@
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
+# Load local bootstrap if present
+
+if [ -f ~/.bootstraprc ]; then
+    source ~/.bootstraprc
+fi
+
 # don't put duplicate lines in the history. See bash(1) for more options
 # ... or force ignoredups and ignorespace
 HISTCONTROL=ignoredups:ignorespace
@@ -116,4 +122,8 @@ if ! shopt -oq posix; then
   elif [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
   fi
+fi
+
+if [ "$SUPERSYSTEM" = "windows" ]; then
+    zsh
 fi
