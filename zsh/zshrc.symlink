@@ -2,6 +2,12 @@ DISABLE_AUTO_UPDATE="true"
 ZSH_THEME="bira"
 export DISABLE_AUTO_TITLE='true'
 
+# Load local bootstrap if present
+
+if [ -f ~/.bootstraprc ]; then
+    source ~/.bootstraprc
+fi
+
 setopt extendedglob
 
 # Define home/end for putty(xterm) to work
@@ -19,6 +25,9 @@ fi
 if [ -d "$HOME/.dotfiles/bin" ]; then
     export PATH="$HOME/.dotfiles/bin:PATH"
 fi
+
+# make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
 # Install zplug if not installed
 [[ -d ~/.zplug && -f ~/.zplug/zplug ]] && {
@@ -118,7 +127,7 @@ zplug "horosgrisa/mysql-colorize", use:mysql-colorize.plugin.zsh
 zplug "themes/bira",   from:oh-my-zsh
 
 # Can manage local plugins
-zplug "~/.zsh", from:local
+[[ -d "~/.zsh" ]] && zplug "~/.zsh", from:local
 
 # Install plugins if there are plugins that have not been installed
 if ! zplug check --verbose; then
@@ -155,6 +164,15 @@ export ENHANCD_FILTER=peco
 # else
 #   export EDITOR='mvim'
 # fi
+
+# Alias definitions.
+# You may want to put all your additions into a separate file like
+# ~/.bash_aliases, instead of adding them here directly.
+# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+
+if [ -f ~/.aliases ]; then
+    . ~/.aliases
+fi
 
 # Load local settings if present
 
