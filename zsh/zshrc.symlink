@@ -121,7 +121,7 @@ zplug "junegunn/fzf", \
     as:command, \
     rename-to:fzf-tmux, \
     use:bin/fzf-tmux
-zplug "b4b4r07/enhancd", use:init.sh, nice:10
+zplug "b4b4r07/enhancd", use:init.sh, nice:11
 zplug "zsh-users/zaw"
 
 # File navigation tool, alt+k
