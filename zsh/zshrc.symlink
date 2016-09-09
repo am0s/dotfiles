@@ -21,10 +21,8 @@ setopt extendedglob
 bindkey '\e[1~' beginning-of-line
 bindkey '\e[4~' end-of-line
 
-# Append extra bin folders to PATH if they exist
-if [ -d "$HOME/bin" ]; then
-    export PATH="$HOME/bin:$PATH"
-fi
+# Append extra bin folders to PATH
+export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
 
 if [ -d "$HOME/dotfiles/bin" ]; then
     export PATH="$HOME/dotfiles/bin:PATH"
