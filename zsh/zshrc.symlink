@@ -1,5 +1,6 @@
 DISABLE_AUTO_UPDATE="true"
 ZSH_THEME="bira"
+ZPLUG_INIT="$HOME/.zplug/init.zsh"
 export DISABLE_AUTO_TITLE='true'
 
 #if [ -z "$HISTFILE" ]; then
@@ -47,29 +48,39 @@ export ENHANCD_FILTER="peco:fzf-tmux"
 [[ -d ~/.zplug ]] || {
     echo "zplug not found, installing zplug to ~/.zplug"
     curl -sL zplug.sh/installer | zsh
-    source ~/.zplug/zplug
-    zplug update --self
+    if [[ -f "$ZPLUG_INIT" ]]; then
+        source "$ZPLUG_INIT"
+        zplug update --self
+    else
+        echo "zplug failed to install"
+    fi
 }
 
 # zplug startup
+if [[ -f "$ZPLUG_INIT" ]]; then
+    source "$ZPLUG_INIT"
 
-source ~/.zplug/zplug
+    # Install zplug if not installed
+    if zplug version >/dev/null 2>/dev/null; then
+        ZPLUG_VER=`zplug version | cut -d" " -f2`
+    fi
+    if [[ "$ZPLUG_VER" == "" ]]; then
+        ZPLUG_VER=`zplug --version`
+    fi
 
-# Install zplug if not installed
-if zplug version >/dev/null 2>/dev/null; then
-    ZPLUG_VER=`zplug version | cut -d" " -f2`
-fi
-if [[ "$ZPLUG_VER" == "" ]]; then
-    ZPLUG_VER=`zplug --version`
-fi
 if dpkg --compare-versions "$ZPLUG_VER" "lt" "2.0"; then
     rm -rf ~/.zplug.old
     mv ~/.zplug ~/.zplug.old
 
     echo "zplug outdated, reinstalling zplug to ~/.zplug"
     curl -sL zplug.sh/installer | zsh
-    source ~/.zplug/zplug
-    zplug update --self
+    if [[ -f "$ZPLUG_INIT" ]]; then
+        source "$ZPLUG_INIT"
+        zplug update --self
+    else
+        echo "zplug failed to reinstall"
+        exit
+    fi
 fi
 
 # Manage zplug itself
@@ -201,6 +212,8 @@ source ~/.dotfiles_root/zsh/plugins/env/env.plugin.zsh
 
 if [ -d "$HOME/.zplug/bin" ]; then
     export PATH="$PATH:$HOME/.zplug/bin"
+fi
+
 fi
 
 # You may need to manually set your language environment
