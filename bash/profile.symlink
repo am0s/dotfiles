@@ -28,3 +28,8 @@ fi
 if [ -d "$HOME/.dotfiles/bin" ]; then
     export PATH="$HOME/.dotfiles/bin:PATH"
 fi
+
+if [[ -z $SSH_AUTH_SOCK ]]; then
+    eval $(ssh-agent -s)
+fi
+
