@@ -43,7 +43,7 @@ else:
 fi
 
 # This must be set before enhancd is loaded
-export ENHANCD_FILTER="peco:fzf-tmux"
+export ENHANCD_FILTER="peco"
 
 [[ -d ~/.zplug ]] || {
     echo "zplug not found, installing zplug to ~/.zplug"
@@ -189,6 +189,7 @@ if test "$CASE_SENSITIVE" = true; then
 fi
 
 if test "$DISABLE_COLOR" = true; then
+
   unset HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND
   unset HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND
 fi
