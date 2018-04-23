@@ -43,7 +43,8 @@ else:
 fi
 
 # This must be set before enhancd is loaded
-export ENHANCD_FILTER="peco"
+export ENHANCD_FILTER="fzy:peco"
+export ENHANCD_DISABLE_DOT="1"
 
 [[ -d ~/.zplug ]] || {
     echo "zplug not found, installing zplug to ~/.zplug"
@@ -116,6 +117,7 @@ zplug "supercrabtree/k"
 # nodejs manager
 #zplug "tj/n", do:"make install"
 
+zplug "aperezdc/zsh-fzy"
 zplug "peco/peco", \
     from:gh-r, \
     as:command, \
