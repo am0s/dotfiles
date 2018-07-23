@@ -50,12 +50,12 @@ fi
 export ENHANCD_FILTER="fzy:peco"
 export ENHANCD_DISABLE_DOT="1"
 
+ZPLUG_UPDATE_SELF=0
 [[ -d ~/.zplug ]] || {
     echo "zplug not found, installing zplug to ~/.zplug"
-    curl -sL zplug.sh/installer | zsh
+    curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
     if [[ -f "$ZPLUG_INIT" ]]; then
-        source "$ZPLUG_INIT"
-        zplug update --self
+        ZPLUG_UPDATE_SELF=1
     else
         echo "zplug failed to install"
     fi
@@ -64,13 +64,8 @@ export ENHANCD_DISABLE_DOT="1"
 # zplug startup
 if [[ -f "$ZPLUG_INIT" ]]; then
     source "$ZPLUG_INIT"
-
-    # Install zplug if not installed
-    if zplug version >/dev/null 2>/dev/null; then
-        ZPLUG_VER=`zplug version | cut -d" " -f2`
-    fi
-    if [[ "$ZPLUG_VER" == "" ]]; then
-        ZPLUG_VER=`zplug --version`
+    if [[ $ZPLUG_UPDATE_SELF -eq 1 ]]; then
+        zplug update --self
     fi
 
     if dpkg --compare-versions "$ZPLUG_VER" "lt" "2.0"; then
@@ -89,7 +84,7 @@ if [[ -f "$ZPLUG_INIT" ]]; then
     fi
 
     # Manage zplug itself
-    zplug "b4b4r07/zplug"
+    zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
     # oh-my-zsh plugins
     zplug "lib/history", from:oh-my-zsh
@@ -220,7 +215,6 @@ if [[ -f "$ZPLUG_INIT" ]]; then
     if [ -d "$HOME/.zplug/bin" ]; then
         export PATH="$PATH:$HOME/.zplug/bin"
     fi
-
 fi
 
 # You may need to manually set your language environment
