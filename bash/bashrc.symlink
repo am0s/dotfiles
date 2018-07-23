@@ -75,7 +75,8 @@ xterm*|rxvt*)
     ;;
 esac
 
-export PATH="$PATH":$HOME/.local/bin
+# Support local binaries and composer binaries
+export PATH="$PATH":$HOME/.local/bin:$HOME/.config/composer/vendor/bin/
 
 # Alias definitions.
 # You may want to put all your additions into a separate file like
