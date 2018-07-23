@@ -69,153 +69,153 @@ if [[ -f "$ZPLUG_INIT" ]]; then
         ZPLUG_VER=`zplug --version`
     fi
 
-if dpkg --compare-versions "$ZPLUG_VER" "lt" "2.0"; then
-    rm -rf ~/.zplug.old
-    mv ~/.zplug ~/.zplug.old
+    if dpkg --compare-versions "$ZPLUG_VER" "lt" "2.0"; then
+        rm -rf ~/.zplug.old
+        mv ~/.zplug ~/.zplug.old
 
-    echo "zplug outdated, reinstalling zplug to ~/.zplug"
-    curl -sL zplug.sh/installer | zsh
-    if [[ -f "$ZPLUG_INIT" ]]; then
-        source "$ZPLUG_INIT"
-        zplug update --self
-    else
-        echo "zplug failed to reinstall"
-        exit
+        echo "zplug outdated, reinstalling zplug to ~/.zplug"
+        curl -sL zplug.sh/installer | zsh
+        if [[ -f "$ZPLUG_INIT" ]]; then
+            source "$ZPLUG_INIT"
+            zplug update --self
+        else
+            echo "zplug failed to reinstall"
+            exit
+        fi
     fi
-fi
 
-# Manage zplug itself
-zplug "b4b4r07/zplug"
+    # Manage zplug itself
+    zplug "b4b4r07/zplug"
 
-# oh-my-zsh plugins
-zplug "lib/history", from:oh-my-zsh
-zplug "lib/clipboard", from:oh-my-zsh, if:"[[ $OSTYPE == *darwin* ]]"
-zplug "lib/compfix", from:oh-my-zsh
-zplug "lib/completion", from:oh-my-zsh, nice:10
-zplug "lib/correction", from:oh-my-zsh
-zplug "lib/key-bindings", from:oh-my-zsh
+    # oh-my-zsh plugins
+    zplug "lib/history", from:oh-my-zsh
+    zplug "lib/clipboard", from:oh-my-zsh, if:"[[ $OSTYPE == *darwin* ]]"
+    zplug "lib/compfix", from:oh-my-zsh
+    zplug "lib/completion", from:oh-my-zsh, nice:10
+    zplug "lib/correction", from:oh-my-zsh
+    zplug "lib/key-bindings", from:oh-my-zsh
 
-zplug "plugins/python",   from:oh-my-zsh
-zplug "plugins/pip",   from:oh-my-zsh
-zplug "plugins/virtualenv",   from:oh-my-zsh
-zplug "plugins/perl",   from:oh-my-zsh
+    zplug "plugins/python",   from:oh-my-zsh
+    zplug "plugins/pip",   from:oh-my-zsh
+    zplug "plugins/virtualenv",   from:oh-my-zsh
+    zplug "plugins/perl",   from:oh-my-zsh
 
-#zplug "lib/key-bindings", from:oh-my-zsh
-zplug "sorin-ionescu/prezto", use:modules/editor
+    #zplug "lib/key-bindings", from:oh-my-zsh
+    zplug "sorin-ionescu/prezto", use:modules/editor
 
-zplug "plugins/git",   from:oh-my-zsh, if:"which git"
-zplug "plugins/svn",   from:oh-my-zsh, if:"which svn"
-zplug "plugins/fabric",   from:oh-my-zsh, if:"which fabric"
-zplug "plugins/composer",   from:oh-my-zsh, if:"which php"
+    zplug "plugins/git",   from:oh-my-zsh, if:"which git"
+    zplug "plugins/svn",   from:oh-my-zsh, if:"which svn"
+    zplug "plugins/fabric",   from:oh-my-zsh, if:"which fabric"
+    zplug "plugins/composer",   from:oh-my-zsh, if:"which php"
 
-zplug "zsh-users/zsh-syntax-highlighting", nice:10
-zplug "zsh-users/zsh-history-substring-search"
+    zplug "zsh-users/zsh-syntax-highlighting", nice:10
+    zplug "zsh-users/zsh-history-substring-search"
 
-# Directory listings for zsh with git features
-zplug "supercrabtree/k"
+    # Directory listings for zsh with git features
+    zplug "supercrabtree/k"
 
-# nodejs manager
-#zplug "tj/n", do:"make install"
+    # nodejs manager
+    #zplug "tj/n", do:"make install"
 
-zplug "aperezdc/zsh-fzy"
-zplug "peco/peco", \
-    from:gh-r, \
-    as:command, \
-    rename-to:peco, \
-    use:"$ZPLUG_RELEASE_MATCH"
-zplug "junegunn/fzf-bin", \
-    from:gh-r, \
-    as:command, \
-    rename-to:fzf, \
-    use:"$ZPLUG_RELEASE_MATCH"
-zplug "junegunn/fzf", \
-    as:command, \
-    rename-to:fzf-tmux, \
-    use:bin/fzf-tmux
-zplug "b4b4r07/enhancd", use:init.sh, nice:11
-zplug "zsh-users/zaw"
+    zplug "aperezdc/zsh-fzy"
+    zplug "peco/peco", \
+        from:gh-r, \
+        as:command, \
+        rename-to:peco, \
+        use:"$ZPLUG_RELEASE_MATCH"
+    zplug "junegunn/fzf-bin", \
+        from:gh-r, \
+        as:command, \
+        rename-to:fzf, \
+        use:"$ZPLUG_RELEASE_MATCH"
+    zplug "junegunn/fzf", \
+        as:command, \
+        rename-to:fzf-tmux, \
+        use:bin/fzf-tmux
+    zplug "b4b4r07/enhancd", use:init.sh, nice:11
+    zplug "zsh-users/zaw"
 
-# File navigation tool, alt+k
-zplug "Vifon/deer", use:deer
+    # File navigation tool, alt+k
+    zplug "Vifon/deer", use:deer
 
-#zplug "joepvd/zsh-hints", use:zsh-hints
+    #zplug "joepvd/zsh-hints", use:zsh-hints
 
-# Make mysql client use colors
-zplug "horosgrisa/mysql-colorize", use:mysql-colorize.plugin.zsh
+    # Make mysql client use colors
+    zplug "horosgrisa/mysql-colorize", use:mysql-colorize.plugin.zsh
 
-# Theme
+    # Theme
 
-zplug "themes/bira",   from:oh-my-zsh
+    zplug "themes/bira",   from:oh-my-zsh
 
-# Can manage local plugins
-[[ -d "~/.zsh" ]] && zplug "~/.zsh", from:local
+    # Can manage local plugins
+    [[ -d "~/.zsh" ]] && zplug "~/.zsh", from:local
 
-# Install plugins if there are plugins that have not been installed
-if ! zplug check --verbose; then
-    printf "Install? [y/N]: "
-    if read -q; then
-        echo; zplug install
+    # Install plugins if there are plugins that have not been installed
+    if ! zplug check --verbose; then
+        printf "Install? [y/N]: "
+        if read -q; then
+            echo; zplug install
+        fi
     fi
-fi
 
-# Load plugins
-zplug load
+    # Load plugins
+    zplug load
 
-# second-stage activation for zplug plugins
+    # second-stage activation for zplug plugins
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+    [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-zle -N deer
-bindkey '\ek' deer
+    zle -N deer
+    bindkey '\ek' deer
 
-## Rebind keys for 'deer'
-#typeset -Ag DEER_KEYS
-#
-#DEER_KEYS[down]=^[OB
-#DEER_KEYS[page_down]=N
-#DEER_KEYS[up]=up
-#DEER_KEYS[page_up]=E
-#DEER_KEYS[enter]=^M
+    ## Rebind keys for 'deer'
+    #typeset -Ag DEER_KEYS
+    #
+    #DEER_KEYS[down]=^[OB
+    #DEER_KEYS[page_down]=N
+    #DEER_KEYS[up]=up
+    #DEER_KEYS[page_up]=E
+    #DEER_KEYS[enter]=^M
 
-#zle -N zsh-hints-param zsh-hints
-#bindkey "^Xp" zsh-hints-param
-#zle -N zsh-hints-paramflags zsh-hints
-#bindkey "^Xf" zsh-hints-paramflags
-#zle -N zsh-hints-glob zsh-hints
-#bindkey "^Xg" zsh-hints-glob
+    #zle -N zsh-hints-param zsh-hints
+    #bindkey "^Xp" zsh-hints-param
+    #zle -N zsh-hints-paramflags zsh-hints
+    #bindkey "^Xf" zsh-hints-paramflags
+    #zle -N zsh-hints-glob zsh-hints
+    #bindkey "^Xg" zsh-hints-glob
 
-# zsh-history-substring-search
+    # zsh-history-substring-search
 
-if test "$CASE_SENSITIVE" = true; then
-  unset HISTORY_SUBSTRING_SEARCH_GLOBBING_FLAGS
-fi
+    if test "$CASE_SENSITIVE" = true; then
+      unset HISTORY_SUBSTRING_SEARCH_GLOBBING_FLAGS
+    fi
 
-if test "$DISABLE_COLOR" = true; then
+    if test "$DISABLE_COLOR" = true; then
 
-  unset HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND
-  unset HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND
-fi
-
-
-# Bind terminal-specific up and down keys
-# Bind in both emacs and vi modes so it works in both, and is not
-# sensitive to whether this is loaded before or after the vi-mode plugin
-if [[ -n "$terminfo[kcuu1]" ]]; then
-  bindkey -M emacs "$terminfo[kcuu1]" history-substring-search-up
-  bindkey -M viins "$terminfo[kcuu1]" history-substring-search-up
-fi
-if [[ -n "$terminfo[kcud1]" ]]; then
-  bindkey -M emacs "$terminfo[kcud1]" history-substring-search-down
-  bindkey -M viins "$terminfo[kcud1]" history-substring-search-down
-fi
+      unset HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND
+      unset HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND
+    fi
 
 
-# Local plugins
-source ~/.dotfiles_root/zsh/plugins/env/env.plugin.zsh
+    # Bind terminal-specific up and down keys
+    # Bind in both emacs and vi modes so it works in both, and is not
+    # sensitive to whether this is loaded before or after the vi-mode plugin
+    if [[ -n "$terminfo[kcuu1]" ]]; then
+      bindkey -M emacs "$terminfo[kcuu1]" history-substring-search-up
+      bindkey -M viins "$terminfo[kcuu1]" history-substring-search-up
+    fi
+    if [[ -n "$terminfo[kcud1]" ]]; then
+      bindkey -M emacs "$terminfo[kcud1]" history-substring-search-down
+      bindkey -M viins "$terminfo[kcud1]" history-substring-search-down
+    fi
 
-if [ -d "$HOME/.zplug/bin" ]; then
-    export PATH="$PATH:$HOME/.zplug/bin"
-fi
+
+    # Local plugins
+    source ~/.dotfiles_root/zsh/plugins/env/env.plugin.zsh
+
+    if [ -d "$HOME/.zplug/bin" ]; then
+        export PATH="$PATH:$HOME/.zplug/bin"
+    fi
 
 fi
 
