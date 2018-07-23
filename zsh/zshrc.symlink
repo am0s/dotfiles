@@ -32,6 +32,10 @@ if [ -d "$HOME/.dotfiles/bin" ]; then
     export PATH="$HOME/.dotfiles/bin:PATH"
 fi
 
+if [[ -z $SSH_AUTH_SOCK ]]; then
+    eval $(ssh-agent -s)
+fi
+
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
