@@ -1,6 +1,7 @@
+# --DOTFILE-TEMPLATE--
 [user]
 	name = Jan Borsodi
-	# Note: email should be set in the GIT_AUTHOR_EMAIL env variable
+	email = @{GIT_EMAIL}
 [push]
 	default = tracking
 
