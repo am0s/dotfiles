@@ -221,7 +221,7 @@ process_file () {
   then
     folder=$(dirname "$dst")
     mkdir -p "$folder"
-    cat "$1" | python $DOTFILES_ROOT/script/process_template.py > "$2"
+    cat "$1" | python3 $DOTFILES_ROOT/script/process_template.py > "$2"
     success "copied $1 to $2"
   fi
 }
