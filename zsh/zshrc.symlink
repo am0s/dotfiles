@@ -64,24 +64,6 @@ ZPLUG_UPDATE_SELF=0
 # zplug startup
 if [[ -f "$ZPLUG_INIT" ]]; then
     source "$ZPLUG_INIT"
-    if [[ $ZPLUG_UPDATE_SELF -eq 1 ]]; then
-        zplug update --self
-    fi
-
-    if dpkg --compare-versions "$ZPLUG_VER" "lt" "2.0"; then
-        rm -rf ~/.zplug.old
-        mv ~/.zplug ~/.zplug.old
-
-        echo "zplug outdated, reinstalling zplug to ~/.zplug"
-        curl -sL zplug.sh/installer | zsh
-        if [[ -f "$ZPLUG_INIT" ]]; then
-            source "$ZPLUG_INIT"
-            zplug update --self
-        else
-            echo "zplug failed to reinstall"
-            exit
-        fi
-    fi
 
     # Manage zplug itself
     zplug 'zplug/zplug', hook-build:'zplug --self-manage'
