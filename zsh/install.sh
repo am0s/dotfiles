@@ -6,7 +6,7 @@
 source $(dirname ..)/script/common
 
 if ! dpkg -l fzy >/dev/null; then
-    info "installing fzy"
+    info "fzy not found, installing\n"
     sudo apt-get update -y && sudo apt-get install -y fzy
     success "fzy installed"
 else
