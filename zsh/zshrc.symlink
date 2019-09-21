@@ -72,7 +72,7 @@ if [[ -f "$ZPLUG_INIT" ]]; then
     zplug "lib/history", from:oh-my-zsh
     zplug "lib/clipboard", from:oh-my-zsh, if:"[[ $OSTYPE == *darwin* ]]"
     zplug "lib/compfix", from:oh-my-zsh
-    zplug "lib/completion", from:oh-my-zsh, nice:10
+    zplug "lib/completion", from:oh-my-zsh, defer:2
     zplug "lib/correction", from:oh-my-zsh
     zplug "lib/key-bindings", from:oh-my-zsh
 
@@ -89,7 +89,7 @@ if [[ -f "$ZPLUG_INIT" ]]; then
     zplug "plugins/fabric",   from:oh-my-zsh, if:"which fabric"
     zplug "plugins/composer",   from:oh-my-zsh, if:"which php"
 
-    zplug "zsh-users/zsh-syntax-highlighting", nice:10
+    zplug "zsh-users/zsh-syntax-highlighting", defer:2
     zplug "zsh-users/zsh-history-substring-search"
 
     # Directory listings for zsh with git features
@@ -113,7 +113,7 @@ if [[ -f "$ZPLUG_INIT" ]]; then
         as:command, \
         rename-to:fzf-tmux, \
         use:bin/fzf-tmux
-    zplug "b4b4r07/enhancd", use:init.sh, nice:11
+    zplug "b4b4r07/enhancd", use:init.sh, defer:3
     zplug "zsh-users/zaw"
 
     # File navigation tool, alt+k
