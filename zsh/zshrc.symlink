@@ -132,11 +132,16 @@ if [[ -f "$ZPLUG_INIT" ]]; then
     [[ -d "~/.zsh" ]] && zplug "~/.zsh", from:local
 
     # Install plugins if there are plugins that have not been installed
-    if ! zplug check --verbose; then
-        printf "Install? [y/N]: "
-        if read -q; then
-            echo; zplug install
+    # But only perform this check if the .zshrc file has changed since last time
+    # This avoids costly checks on each invocation of zsh
+    if [[ ! -f ~/.zplug_check ]] || [[ ~/.zshrc -nt ~/.zplug_check ]]; then
+        if ! zplug check --verbose; then
+            printf "Install? [y/N]: "
+            if read -q; then
+                echo; zplug install
+            fi
         fi
+        touch -f ~/.zshrc ~/.zplug_check
     fi
 
     # Load plugins
