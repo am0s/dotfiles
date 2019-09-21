@@ -6,6 +6,11 @@ set -e
 
 cd "$(dirname $0)"/..
 
+source script/common
+
+info "Locating installers\n"
+
 # find the installers and run them iteratively
 find . -name install.sh | while read installer ; do sh -c "${installer}" ; done
 
+sh -c "script/bootstrap"
