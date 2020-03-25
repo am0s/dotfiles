@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # Bootstrap docker container on first run (or when recreated)
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
 # Check if dotfiles have been properly bootstrapped and installed
 if [[ ! -d $HOME/.dotfiles_root ]]; then
     echo "No dotfiles have been installed"
@@ -15,8 +17,8 @@ if [[ ! -d $HOME/.dotfiles_root ]]; then
                     ;;
                 yes|Y|y)
                     echo "Bootstrapping dotfiles"
-                    $HOME/.home-common/dotfiles/script/bootstrap
-                    $HOME/.home-common/dotfiles/script/install
+                    $DIR/bootstrap
+                    $DIR/install
                     break
                     ;;
                 *)

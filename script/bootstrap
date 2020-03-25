@@ -13,6 +13,10 @@ source "script/common"
 info "Bootstrapping dotfiles\n"
 
 setup_gitconfig () {
+  if [[ -t 0 ]]; then
+    return
+  fi
+
   if ! [ -f git/gitconfig.symlink ]
   then
     info "setup gitconfig\n"
@@ -59,26 +63,29 @@ link_file () {
         while true; do
           user "File already exists: $dst ($(basename "$src")), what do you want to do?\n\
           [s]kip, [S]kip all, [o]verwrite, [O]verwrite all, [d]iff, [b]ackup, [B]ackup all?"
-          read -n 1 action
-
-          case "$action" in
-            o )
-              overwrite=true;;
-            O )
-              overwrite_all=true;;
-            d )
-              changes=true;;
-            b )
-              backup=true;;
-            B )
-              backup_all=true;;
-            s )
-              skip=true;;
-            S )
-              skip_all=true;;
-            * )
-              ;;
-          esac
+          if [[ -t 0 ]]; then
+            read -n 1 action
+            case "$action" in
+              o )
+                overwrite=true;;
+              O )
+                overwrite_all=true;;
+              d )
+                changes=true;;
+              b )
+                backup=true;;
+              B )
+                backup_all=true;;
+              s )
+                skip=true;;
+              S )
+                skip_all=true;;
+              * )
+                ;;
+            esac
+          else
+            backup=true
+          fi
 
         if [ "$changes" == "true" ]
         then
@@ -146,26 +153,30 @@ process_file () {
         while true; do
           user "File already exists: $dst ($(basename "$src")), what do you want to do?\n\
           [s]kip, [S]kip all, [o]verwrite, [O]verwrite all, [d]iff, [b]ackup, [B]ackup all?"
-          read -n 1 action
+          if [[ -t 0 ]]; then
+            read -n 1 action
 
-          case "$action" in
-            o )
-              overwrite=true;;
-            O )
-              overwrite_all=true;;
-            d )
-              changes=true;;
-            b )
-              backup=true;;
-            B )
-              backup_all=true;;
-            s )
-              skip=true;;
-            S )
-              skip_all=true;;
-            * )
-              ;;
-          esac
+            case "$action" in
+              o )
+                overwrite=true;;
+              O )
+                overwrite_all=true;;
+              d )
+                changes=true;;
+              b )
+                backup=true;;
+              B )
+                backup_all=true;;
+              s )
+                skip=true;;
+              S )
+                skip_all=true;;
+              * )
+                ;;
+            esac
+          else
+            backup=true
+          fi
 
         if [ "$changes" == "true" ]
         then
