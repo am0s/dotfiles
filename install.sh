@@ -17,8 +17,8 @@ if [[ ! -d $HOME/.dotfiles_root ]]; then
                     ;;
                 yes|Y|y)
                     echo "Bootstrapping dotfiles"
-                    $DIR/bootstrap
-                    $DIR/install
+                    $DIR/script/bootstrap
+                    $DIR/script/install
                     break
                     ;;
                 *)
@@ -26,6 +26,10 @@ if [[ ! -d $HOME/.dotfiles_root ]]; then
                     ;;
             esac
         done
+    else
+        echo "Bootstrapping dotfiles (non-interactive mode)"
+        $DIR/script/bootstrap
+        $DIR/script/install
     fi
 fi
 
