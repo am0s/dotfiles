@@ -1,6 +1,6 @@
 # --DOTFILE-TEMPLATE--
 [user]
-	name = Jan Borsodi
+	name2 = Jan Borsodi
 [push]
 	default = tracking
 
