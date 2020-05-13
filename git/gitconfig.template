@@ -6,24 +6,24 @@
 	default = tracking
 
 [alias]
-        l = log --graph --decorate
+	l = log --graph --decorate
 	lg = log --oneline --graph --decorate
 
-        # List fetched commits
-        lc = !git l ORIG_HEAD.. --stat --no-merges
-        # List commits affected by last command
-        new = !sh -c 'git l $1\@{1}..$1\@{0} "$@"'
+	# List fetched commits
+	lc = !git l ORIG_HEAD.. --stat --no-merges
+	# List commits affected by last command
+	new = !sh -c 'git l $1\@{1}..$1\@{0} "$@"'
 
-        # Spelunking of the project's history
-        whois = "!sh -c 'git log -i -1 --pretty=\"format:%an <%ae>\n\" --author=\"$1\"' -"
-        whatis = show -s --pretty='tformat:%h (%s, %ad)' --date=short
+	# Spelunking of the project's history
+	whois = "!sh -c 'git log -i -1 --pretty=\"format:%an <%ae>\n\" --author=\"$1\"' -"
+	whatis = show -s --pretty='tformat:%h (%s, %ad)' --date=short
 
-        sortdiff = !sh -c 'git diff "$@" | grep "^[+-]" | sort --key=1.2 | uniq -u -s1'
+	sortdiff = !sh -c 'git diff "$@" | grep "^[+-]" | sort --key=1.2 | uniq -u -s1'
 
-        # List affected files in given revision range
-        lsch = "!f() { git diff --name-status -r "$1"; }; f"
-        # List affected files in n-last revisions
-        lschn = "!f() { git diff --name-status -r "HEAD~${1-1}"; }; f"
+	# List affected files in given revision range
+	lsch = "!f() { git diff --name-status -r "$1"; }; f"
+	# List affected files in n-last revisions
+	lschn = "!f() { git diff --name-status -r "HEAD~${1-1}"; }; f"
 
 	outgoing = log --graph --decorate \@{u}..
 	incoming = "!git remote update -p; git log --graph --decorate ..\@{u}"
