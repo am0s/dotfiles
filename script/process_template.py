@@ -11,28 +11,29 @@ def main():
 
     config_file_path = os.path.expanduser("~/.dotfiles.json")
 
-    if not os.path.exists(config_file_path):
-        print(sys.stdin.read(), end=None)
-        return
-
     infile = sys.stdin
     text = infile.read()
-    with open(config_file_path) as config_file:
-        config = json.load(config_file)
+    config = {}
+    if os.path.exists(config_file_path):
+        with open(config_file_path) as config_file:
+            config = json.load(config_file)
 
     variables = config.get("variables", {})
 
     def replace_var(match):
         if match.group(1):
             return "@" + match.group(0)[2:]
-        if match.group(2) in variables:
-            return variables[match.group(2)]
-        elif match.group(3):
-            return match.group(4)
+        if match.group(3) in variables:
+            return variables[match.group(3)]
+        elif match.group(4):
+            return match.group(5)
         else:
             return match.group(0)
 
-    text = re.sub(r"(\@\\{[^}]*})|\@\{([a-zA-Z0-9_]+)(-([^}]*))?}", replace_var, text)
+    text = re.sub(r"""
+        ( \\@\{ [^}]* } ) |                       # escaped: \@{....}
+        ( @\{ ([a-zA-Z0-9_]+) (- ([^}]*) )? } )   # match with optional default: @{foo-default}
+    """, replace_var, text, flags=re.VERBOSE)
 
     print(text, end=None)
 

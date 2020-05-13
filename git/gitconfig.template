@@ -1,7 +1,7 @@
 # --DOTFILE-TEMPLATE--
 [user]
 	name = Jan Borsodi
-	email = @{GIT_EMAIL}
+	email = @{GIT_EMAIL-jborsodi@gmail.com}
 [push]
 	default = tracking
 
@@ -12,7 +12,7 @@
         # List fetched commits
         lc = !git l ORIG_HEAD.. --stat --no-merges
         # List commits affected by last command
-        new = !sh -c 'git l $1@{1}..$1@{0} "$@"'
+        new = !sh -c 'git l $1\@{1}..$1\@{0} "$@"'
 
         # Spelunking of the project's history
         whois = "!sh -c 'git log -i -1 --pretty=\"format:%an <%ae>\n\" --author=\"$1\"' -"
@@ -25,8 +25,8 @@
         # List affected files in n-last revisions
         lschn = "!f() { git diff --name-status -r "HEAD~${1-1}"; }; f"
 
-	outgoing = log --graph --decorate @{u}..
-	incoming = "!git remote update -p; git log --graph --decorate ..@{u}"
+	outgoing = log --graph --decorate \@{u}..
+	incoming = "!git remote update -p; git log --graph --decorate ..\@{u}"
 
 	co = checkout
 	st = status
