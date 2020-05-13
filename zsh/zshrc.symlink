@@ -233,6 +233,33 @@ fi
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
 
+# Check if git config is correct
+if [[ -t 0 ]]; then
+    if which git >/dev/null; then
+        if ! git config --global --get user.name >/dev/null; then
+            echo "No user name has been set in git config, please supply one"
+            echo -n "Name: "
+            read git_name
+            if [[ -n $git_name ]]; then
+                git config --global user.name $git_name
+            else
+                echo "Skipping setting git user name"
+            fi
+        fi
+        if ! git config --global --get user.email >/dev/null; then
+            echo "No user email has been set in git config, please supply one"
+            echo -n "E-mail: "
+            read git_email
+            if [[ -n $git_email ]]; then
+                git config --global user.email $git_email
+            else
+                echo "Skipping setting git email"
+            fi
+        fi
+    fi
+fi
+
+
 if [ -f ~/.aliases ]; then
     . ~/.aliases
 fi
