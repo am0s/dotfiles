@@ -1,7 +1,6 @@
 # --DOTFILE-TEMPLATE--
 [user]
 	name = Jan Borsodi
-	email = @{GIT_EMAIL-jborsodi@gmail.com}
 [push]
 	default = tracking
 
