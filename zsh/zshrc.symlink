@@ -51,15 +51,17 @@ export ENHANCD_FILTER="fzy:peco"
 export ENHANCD_DISABLE_DOT="1"
 
 ZPLUG_UPDATE_SELF=0
-[[ -d ~/.zplug ]] || {
-    echo "zplug not found, installing zplug to ~/.zplug"
-    curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
-    if [[ -f "$ZPLUG_INIT" ]]; then
-        ZPLUG_UPDATE_SELF=1
-    else
-        echo "zplug failed to install"
-    fi
-}
+if [[ -z $ZPLUG_DISABLE ]]; then
+    [[ -d ~/.zplug ]] || {
+        echo "zplug not found, installing zplug to ~/.zplug"
+        curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
+        if [[ -f "$ZPLUG_INIT" ]]; then
+            ZPLUG_UPDATE_SELF=1
+        else
+            echo "zplug failed to install"
+        fi
+    }
+fi
 
 # zplug startup
 if [[ -f "$ZPLUG_INIT" ]]; then
