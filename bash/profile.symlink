@@ -31,6 +31,24 @@ if [ -d "$HOME/.dotfiles/bin" ]; then
 fi
 
 if [[ -z $SSH_AUTH_SOCK ]]; then
-    eval $(ssh-agent -s)
+    # If npiprelay.exe is available use it to pipe the windows ssh-agent to WSL
+    # Get it from https://github.com/jstarks/npiperelay
+    if which npiperelay.exe >/dev/null; then
+        echo "Using npiperelay"
+        export SSH_AUTH_SOCK=$HOME/.ssh/agent.sock
+        ss -a | grep -q $SSH_AUTH_SOCK
+        if [ $? -ne 0   ]; then
+            rm -f $SSH_AUTH_SOCK
+            echo "Creating npiperelay"
+            ( setsid socat UNIX-LISTEN:$SSH_AUTH_SOCK,fork EXEC:"npiperelay.exe -ei -s //./pipe/openssh-ssh-agent",nofork & ) >/dev/null 2>&1
+        fi
+    elif which keychain >/dev/null; then
+        echo "Using keychain"
+        # Use keychain to reuse ssh-agent across multiple logins
+        keychain -q
+    else
+        echo "Using ssh-agent"
+        # If not create normal ssh-agent
+        eval $(ssh-agent -s) >/dev/null
+    fi
 fi
-
