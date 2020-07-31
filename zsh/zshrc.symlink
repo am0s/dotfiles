@@ -277,4 +277,4 @@ if [ -e /usr/share/source-highlight/src-hilite-lesspipe.sh ]; then
 fi
 export LESS=' -R '
 
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh" || true
