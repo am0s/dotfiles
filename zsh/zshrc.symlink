@@ -34,13 +34,13 @@ fi
 
 
 if [[ -z $SSH_AUTH_SOCK ]]; then
-    # If npiprelay.exe is available use it to pipe the windows ssh-agent to WSL
+    # If npiperelay.exe is available use it to pipe the windows ssh-agent to WSL
     # Get it from https://github.com/jstarks/npiperelay
     if which npiperelay.exe >/dev/null; then
         export SSH_AUTH_SOCK=$HOME/.ssh/agent.sock
-        ss -a | grep -q $SSH_AUTH_SOCK
-        if [ $? -ne 0   ]; then
+        if ! (ss -a | grep -q $SSH_AUTH_SOCK); then
             rm -f $SSH_AUTH_SOCK
+            mkdir -p `dirname $SSH_AUTH_SOCK`
             ( setsid socat UNIX-LISTEN:$SSH_AUTH_SOCK,fork EXEC:"npiperelay.exe -ei -s //./pipe/openssh-ssh-agent",nofork & ) >/dev/null 2>&1
         fi
     elif which keychain >/dev/null; then

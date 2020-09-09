@@ -43,6 +43,31 @@ shopt -s checkwinsize
 # match all files and zero or more directories and subdirectories.
 #shopt -s globstar
 
+if [[ -z $SSH_AUTH_SOCK ]]; then
+    # If npiperelay.exe is available use it to pipe the windows ssh-agent to WSL
+    # Get it from https://github.com/jstarks/npiperelay
+    if which npiperelay.exe >/dev/null; then
+        export SSH_AUTH_SOCK=$HOME/.ssh/agent.sock
+        export SSH_AGENT_MODE=npiperelay
+        if ! (ss -a | grep -q $SSH_AUTH_SOCK); then
+            rm -f $SSH_AUTH_SOCK
+            mkdir -p `dirname $SSH_AUTH_SOCK`
+            ( setsid socat UNIX-LISTEN:$SSH_AUTH_SOCK,fork EXEC:"npiperelay.exe -ei -s //./pipe/openssh-ssh-agent",nofork & ) >/dev/null 2>&1
+            export SSH_AGENT_MODE=npiperelay2
+        fi
+    elif which keychain >/dev/null; then
+        # Use keychain to reuse ssh-agent across multiple logins
+        keychain -q
+        export SSH_AGENT_MODE=keychain
+    else
+        # If not create normal ssh-agent
+        eval $(ssh-agent -s) >/dev/null
+        export SSH_AGENT_MODE=ssh-agent
+    fi
+else
+    export SSH_AGENT_MODE=sock
+fi
+
 if which kubectl >/dev/null; then
     source <(kubectl completion bash)
 fi
@@ -162,3 +187,4 @@ fi
 if [ "$SUPERSYSTEM" = "windows" ] && [[ -f /usr/bin/zsh ]]; then
     zsh
 fi
+
