@@ -1,8 +1,12 @@
+# Dotfiles
+
+This repository contains dotfiles for my personal use.
+
 # Quick setup
 
-```
+```shell
 # Clone, create symlinks and install required packages
-git clone git@bitbucket.org:amos/dotfiles.git .dotfiles
+git clone https://github.com/am0s/dotfiles.git ~/.dotfiles
 ~/.dotfiles/install.sh
 
 # Start zsh
