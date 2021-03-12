@@ -23,7 +23,7 @@ if which git >/dev/null; then
     if [[ -t 0 ]]; then
         if ! git config --global --get user.name >/dev/null; then
             echo "No user name has been set in git config, please supply one"
-            if [[ -n "${USER_FULL_NAME}" ]]; then
+            if [[ -n "${USER_FULL_NAME-}" ]]; then
                 FULL_NAME="${USER_FULL_NAME}"
             else
                 FULL_NAME=`getent passwd $USER | cut -d":" -f5 | cut -d"," -f1`
@@ -37,7 +37,7 @@ if which git >/dev/null; then
         fi
         if ! git config --global --get user.email >/dev/null; then
             echo "No user email has been set in git config, please supply one"
-            EMAIL="${USER_EMAIL}"
+            EMAIL="${USER_EMAIL-}"
             read -e -p "E-mail: " -i "$EMAIL" git_email
             if [[ -n $git_email ]]; then
                 git config --global user.email $git_email
