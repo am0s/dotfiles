@@ -11,6 +11,10 @@ source script/common
 info "Locating installers\n"
 
 # find the installers and run them iteratively
-find . -name install.sh | while read installer ; do sh -c "${installer}" ; done
+installers=$(find . -mindepth 2 -name install.sh)
+for installer in $installers; do
+    info "Running ${installer}\n"
+    sh -ic "${installer}"
+done
 
 sh -c "script/bootstrap"
