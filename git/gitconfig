@@ -1,6 +1,5 @@
 # vim: set ft=gitconfig ts=4 sw=4 noexpandtab:
 [user]
-	name = Jan Borsodi
 
 [push]
 	default = tracking
@@ -47,5 +46,6 @@
 
 [color]
 	ui = true
+
 [core]
 	excludesfile = $HOME/.gitignore_global
