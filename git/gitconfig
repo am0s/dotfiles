@@ -1,4 +1,4 @@
-# vim: set ft=gitconfig ts=4 sw=4 noexpandtab:
+# code: language=gitconfig insertSpaces=false tabSize=4
 [user]
 
 [push]
