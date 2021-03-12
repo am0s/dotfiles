@@ -1,8 +1,8 @@
 DISABLE_AUTO_UPDATE="true"
 ZSH_THEME="bira"
 ZPLUG_INIT="$HOME/.zplug/init.zsh"
-ANTIGEN_HOME="$HOME/.antigen"
-ANTIGEN_PATH="$ANTIGEN_HOME/antigen.zsh"
+ADOTDIR="${ADOTDIR-$HOME/.antigen}"
+ANTIGEN_BIN="$ADOTDIR/antigen.zsh"
 
 # Choose from: antigen, zplug or none
 PLUGIN_MANAGER="antigen"
@@ -77,22 +77,22 @@ if [[ "$PLUGIN_MANAGER" == "antigen" ]]; then
         echo "Starting antigen"
     fi
 
-    if [[ ! -f "$ANTIGEN_PATH" ]]; then
-        echo "antigen not found, installing antigen to $ANTIGEN_PATH"
-        mkdir -p `dirname $ANTIGEN_PATH`
-        curl -sL --proto-redir -all,https git.io/antigen > "$ANTIGEN_PATH"
+    if [[ ! -f "$ANTIGEN_BIN" ]]; then
+        echo "antigen not found, installing antigen to $ANTIGEN_BIN"
+        mkdir -p `dirname $ANTIGEN_BIN`
+        curl -sL --proto-redir -all,https git.io/antigen > "$ANTIGEN_BIN"
     fi
-    if [[ -f "$ANTIGEN_PATH" ]]; then
-        if [[ -f ${ANTIGEN_HOME}/.cache/.zcache-payload ]]; then
+    if [[ -f "$ANTIGEN_BIN" ]]; then
+        if [[ -f ${ADOTDIR}/.cache/.zcache-payload ]]; then
             # Load bundles statically
-            source ${ANTIGEN_HOME}/.cache/.zcache-payload
+            source ${ADOTDIR}/.cache/.zcache-payload
 
             # You will need to call compinit
             autoload -Uz compinit
-            compinit -d ${ANTIGEN_HOME}/.zcompdump
+            compinit -d ${ADOTDIR}/.zcompdump
         else
             # If there is no cache available do load and execute antigen
-            source "$ANTIGEN_PATH"
+            source "$ANTIGEN_BIN"
             antigen init $HOME/.antigenrc
         fi
 
