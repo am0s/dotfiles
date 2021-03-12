@@ -1,6 +1,12 @@
 DISABLE_AUTO_UPDATE="true"
 ZSH_THEME="bira"
 ZPLUG_INIT="$HOME/.zplug/init.zsh"
+ANTIGEN_HOME="$HOME/.antigen"
+ANTIGEN_PATH="$ANTIGEN_HOME/antigen.zsh"
+
+# Choose from: antigen, zplug or none
+PLUGIN_MANAGER="antigen"
+
 export DISABLE_AUTO_TITLE='true'
 
 #if [ -z "$HISTFILE" ]; then
@@ -66,171 +72,228 @@ fi
 export ENHANCD_FILTER="fzy:peco"
 export ENHANCD_DISABLE_DOT="1"
 
-ZPLUG_UPDATE_SELF=0
-if [[ -z $ZPLUG_DISABLE ]]; then
-    [[ -d ~/.zplug ]] || {
-        echo "zplug not found, installing zplug to ~/.zplug"
-        curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
-        if [[ -f "$ZPLUG_INIT" ]]; then
-            ZPLUG_UPDATE_SELF=1
+if [[ "$PLUGIN_MANAGER" == "antigen" ]]; then
+    if [[ -n "${ZSH_DEBUG-}" ]]; then
+        echo "Starting antigen"
+    fi
+
+    if [[ ! -f "$ANTIGEN_PATH" ]]; then
+        echo "antigen not found, installing antigen to $ANTIGEN_PATH"
+        mkdir -p `dirname $ANTIGEN_PATH`
+        curl -sL --proto-redir -all,https git.io/antigen > "$ANTIGEN_PATH"
+    fi
+    if [[ -f "$ANTIGEN_PATH" ]]; then
+        if [[ -f ${ANTIGEN_HOME}/.cache/.zcache-payload ]]; then
+            # Load bundles statically
+            source ${ANTIGEN_HOME}/.cache/.zcache-payload
+
+            # You will need to call compinit
+            autoload -Uz compinit
+            compinit -d ${ANTIGEN_HOME}/.zcompdump
         else
-            echo "zplug failed to install"
+            # If there is no cache available do load and execute antigen
+            source "$ANTIGEN_PATH"
+            antigen init $HOME/.antigenrc
         fi
-    }
+
+        zle -N deer
+        bindkey '\ek' deer
+
+        if test "$CASE_SENSITIVE" = true; then
+            unset HISTORY_SUBSTRING_SEARCH_GLOBBING_FLAGS
+        fi
+
+        if test "$DISABLE_COLOR" = true; then
+            unset HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND
+            unset HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND
+        fi
+
+
+        # Bind terminal-specific up and down keys
+        # Bind in both emacs and vi modes so it works in both, and is not
+        # sensitive to whether this is loaded before or after the vi-mode plugin
+        if [[ -n "$terminfo[kcuu1]" ]]; then
+            bindkey -M emacs "$terminfo[kcuu1]" history-substring-search-up
+            bindkey -M viins "$terminfo[kcuu1]" history-substring-search-up
+        fi
+        if [[ -n "$terminfo[kcud1]" ]]; then
+            bindkey -M emacs "$terminfo[kcud1]" history-substring-search-down
+            bindkey -M viins "$terminfo[kcud1]" history-substring-search-down
+        fi
+
+    fi
 fi
 
-# zplug startup
-if [[ -f "$ZPLUG_INIT" ]]; then
-    source "$ZPLUG_INIT"
+if [[ "$PLUGIN_MANAGER" == "zplug" ]]; then
+    if [[ -n "${ZSH_DEBUG-}" ]]; then
+        echo "Starting zplug"
+    fi
 
-    # Manage zplug itself
-    zplug 'zplug/zplug', hook-build:'zplug --self-manage'
-
-    # oh-my-zsh plugins
-    zplug "lib/history", from:oh-my-zsh
-    zplug "lib/clipboard", from:oh-my-zsh, if:"[[ $OSTYPE == *darwin* ]]"
-    zplug "lib/compfix", from:oh-my-zsh
-    zplug "lib/completion", from:oh-my-zsh, defer:2
-    zplug "lib/correction", from:oh-my-zsh
-    zplug "lib/key-bindings", from:oh-my-zsh
-
-    zplug "plugins/python",   from:oh-my-zsh
-    zplug "plugins/pip",   from:oh-my-zsh
-    zplug "plugins/virtualenv",   from:oh-my-zsh
-    zplug "plugins/perl",   from:oh-my-zsh
-    zplug "plugins/httpie",   from:oh-my-zsh
-    zplug "plugins/yarn",   from:oh-my-zsh
-    zplug "plugins/ripgrep",   from:oh-my-zsh
-    zplug "plugins/jsontools",   from:oh-my-zsh
-
-    zplug "plugins/ansible",   from:oh-my-zsh
-    zplug "plugins/docker",   from:oh-my-zsh
-    zplug "plugins/docker-compose",   from:oh-my-zsh
-    zplug "plugins/kubectl",   from:oh-my-zsh
-    zplug "plugins/terraform",   from:oh-my-zsh
-
-    zplug "plugins/django",   from:oh-my-zsh
-
-    #zplug "lib/key-bindings", from:oh-my-zsh
-    zplug "sorin-ionescu/prezto", use:modules/editor
-
-    zplug "plugins/git",   from:oh-my-zsh, if:"which git"
-    zplug "plugins/svn",   from:oh-my-zsh, if:"which svn"
-    zplug "plugins/fabric",   from:oh-my-zsh, if:"which fabric"
-    zplug "plugins/composer",   from:oh-my-zsh, if:"which php"
-
-    zplug "zsh-users/zsh-syntax-highlighting", defer:2
-    zplug "zsh-users/zsh-history-substring-search"
-
-    # Directory listings for zsh with git features
-    zplug "supercrabtree/k"
-
-    # nodejs manager
-    #zplug "tj/n", do:"make install"
-
-    zplug "aperezdc/zsh-fzy"
-    zplug "peco/peco", \
-        from:gh-r, \
-        as:command, \
-        rename-to:peco, \
-        use:"$ZPLUG_RELEASE_MATCH"
-    zplug "junegunn/fzf-bin", \
-        from:gh-r, \
-        as:command, \
-        rename-to:fzf, \
-        use:"$ZPLUG_RELEASE_MATCH"
-    zplug "junegunn/fzf", \
-        as:command, \
-        rename-to:fzf-tmux, \
-        use:bin/fzf-tmux
-    zplug "b4b4r07/enhancd", use:init.sh, defer:3
-    zplug "zsh-users/zaw"
-
-    # File navigation tool, alt+k
-    zplug "Vifon/deer", use:deer
-
-    #zplug "joepvd/zsh-hints", use:zsh-hints
-
-    # Make mysql client use colors
-    zplug "horosgrisa/mysql-colorize", use:mysql-colorize.plugin.zsh
-
-    # Theme
-
-    zplug "themes/bira",   from:oh-my-zsh
-
-    # Can manage local plugins
-    [[ -d "~/.zsh" ]] && zplug "~/.zsh", from:local
-
-    # Install plugins if there are plugins that have not been installed
-    # But only perform this check if the .zshrc file has changed since last time
-    # This avoids costly checks on each invocation of zsh
-    if [[ ! -f ~/.zplug_check ]] || [[ ~/.zshrc -nt ~/.zplug_check ]]; then
-        if ! zplug check --verbose; then
-            printf "Install? [y/N]: "
-            if read -q; then
-                echo; zplug install
+    ZPLUG_UPDATE_SELF=0
+    if [[ -z $ZPLUG_DISABLE ]]; then
+        [[ -d ~/.zplug ]] || {
+            echo "zplug not found, installing zplug to ~/.zplug"
+            curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
+            if [[ -f "$ZPLUG_INIT" ]]; then
+                ZPLUG_UPDATE_SELF=1
+            else
+                echo "zplug failed to install"
             fi
+        }
+    fi
+
+    # zplug startup
+    if [[ -f "$ZPLUG_INIT" ]]; then
+        source "$ZPLUG_INIT"
+
+        # Manage zplug itself
+        zplug 'zplug/zplug', hook-build:'zplug --self-manage'
+
+        # oh-my-zsh plugins
+        zplug "lib/history", from:oh-my-zsh
+        zplug "lib/clipboard", from:oh-my-zsh, if:"[[ $OSTYPE == *darwin* ]]"
+        zplug "lib/compfix", from:oh-my-zsh
+        zplug "lib/completion", from:oh-my-zsh, defer:2
+        zplug "lib/correction", from:oh-my-zsh
+        zplug "lib/key-bindings", from:oh-my-zsh
+
+        zplug "plugins/python",   from:oh-my-zsh
+        zplug "plugins/pip",   from:oh-my-zsh
+        zplug "plugins/virtualenv",   from:oh-my-zsh
+        zplug "plugins/perl",   from:oh-my-zsh
+        zplug "plugins/httpie",   from:oh-my-zsh
+        zplug "plugins/yarn",   from:oh-my-zsh
+        zplug "plugins/ripgrep",   from:oh-my-zsh
+        zplug "plugins/jsontools",   from:oh-my-zsh
+
+        zplug "plugins/ansible",   from:oh-my-zsh
+        zplug "plugins/docker",   from:oh-my-zsh
+        zplug "plugins/docker-compose",   from:oh-my-zsh
+        zplug "plugins/kubectl",   from:oh-my-zsh
+        zplug "plugins/terraform",   from:oh-my-zsh
+
+        zplug "plugins/django",   from:oh-my-zsh
+
+        #zplug "lib/key-bindings", from:oh-my-zsh
+        zplug "sorin-ionescu/prezto", use:modules/editor
+
+        zplug "plugins/git",   from:oh-my-zsh, if:"which git"
+        zplug "plugins/svn",   from:oh-my-zsh, if:"which svn"
+        zplug "plugins/fabric",   from:oh-my-zsh, if:"which fabric"
+        zplug "plugins/composer",   from:oh-my-zsh, if:"which php"
+
+        zplug "zsh-users/zsh-syntax-highlighting", defer:2
+        zplug "zsh-users/zsh-history-substring-search"
+
+        # Directory listings for zsh with git features
+        zplug "supercrabtree/k"
+
+        # nodejs manager
+        #zplug "tj/n", do:"make install"
+
+        zplug "aperezdc/zsh-fzy"
+        zplug "peco/peco", \
+            from:gh-r, \
+            as:command, \
+            rename-to:peco, \
+            use:"$ZPLUG_RELEASE_MATCH"
+        zplug "junegunn/fzf-bin", \
+            from:gh-r, \
+            as:command, \
+            rename-to:fzf, \
+            use:"$ZPLUG_RELEASE_MATCH"
+        zplug "junegunn/fzf", \
+            as:command, \
+            rename-to:fzf-tmux, \
+            use:bin/fzf-tmux
+        zplug "b4b4r07/enhancd", use:init.sh, defer:3
+        zplug "zsh-users/zaw"
+
+        # File navigation tool, alt+k
+        zplug "Vifon/deer", use:deer
+
+        #zplug "joepvd/zsh-hints", use:zsh-hints
+
+        # Make mysql client use colors
+        zplug "horosgrisa/mysql-colorize", use:mysql-colorize.plugin.zsh
+
+        # Theme
+
+        zplug "themes/bira",   from:oh-my-zsh
+
+        # Can manage local plugins
+        [[ -d "~/.zsh" ]] && zplug "~/.zsh", from:local
+
+        # Install plugins if there are plugins that have not been installed
+        # But only perform this check if the .zshrc file has changed since last time
+        # This avoids costly checks on each invocation of zsh
+        if [[ ! -f ~/.zplug_check ]] || [[ ~/.zshrc -nt ~/.zplug_check ]]; then
+            if ! zplug check --verbose; then
+                printf "Install? [y/N]: "
+                if read -q; then
+                    echo; zplug install
+                fi
+            fi
+            touch -f ~/.zshrc ~/.zplug_check
         fi
-        touch -f ~/.zshrc ~/.zplug_check
-    fi
 
-    # Load plugins
-    zplug load
+        # Load plugins
+        zplug load
 
-    # second-stage activation for zplug plugins
+        # second-stage activation for zplug plugins
 
-    [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+        [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-    zle -N deer
-    bindkey '\ek' deer
+        zle -N deer
+        bindkey '\ek' deer
 
-    ## Rebind keys for 'deer'
-    #typeset -Ag DEER_KEYS
-    #
-    #DEER_KEYS[down]=^[OB
-    #DEER_KEYS[page_down]=N
-    #DEER_KEYS[up]=up
-    #DEER_KEYS[page_up]=E
-    #DEER_KEYS[enter]=^M
+        ## Rebind keys for 'deer'
+        #typeset -Ag DEER_KEYS
+        #
+        #DEER_KEYS[down]=^[OB
+        #DEER_KEYS[page_down]=N
+        #DEER_KEYS[up]=up
+        #DEER_KEYS[page_up]=E
+        #DEER_KEYS[enter]=^M
 
-    #zle -N zsh-hints-param zsh-hints
-    #bindkey "^Xp" zsh-hints-param
-    #zle -N zsh-hints-paramflags zsh-hints
-    #bindkey "^Xf" zsh-hints-paramflags
-    #zle -N zsh-hints-glob zsh-hints
-    #bindkey "^Xg" zsh-hints-glob
+        #zle -N zsh-hints-param zsh-hints
+        #bindkey "^Xp" zsh-hints-param
+        #zle -N zsh-hints-paramflags zsh-hints
+        #bindkey "^Xf" zsh-hints-paramflags
+        #zle -N zsh-hints-glob zsh-hints
+        #bindkey "^Xg" zsh-hints-glob
 
-    # zsh-history-substring-search
+        # zsh-history-substring-search
 
-    if test "$CASE_SENSITIVE" = true; then
-      unset HISTORY_SUBSTRING_SEARCH_GLOBBING_FLAGS
-    fi
+        if test "$CASE_SENSITIVE" = true; then
+            unset HISTORY_SUBSTRING_SEARCH_GLOBBING_FLAGS
+        fi
 
-    if test "$DISABLE_COLOR" = true; then
-
-      unset HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND
-      unset HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND
-    fi
+        if test "$DISABLE_COLOR" = true; then
+            unset HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND
+            unset HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND
+        fi
 
 
-    # Bind terminal-specific up and down keys
-    # Bind in both emacs and vi modes so it works in both, and is not
-    # sensitive to whether this is loaded before or after the vi-mode plugin
-    if [[ -n "$terminfo[kcuu1]" ]]; then
-      bindkey -M emacs "$terminfo[kcuu1]" history-substring-search-up
-      bindkey -M viins "$terminfo[kcuu1]" history-substring-search-up
-    fi
-    if [[ -n "$terminfo[kcud1]" ]]; then
-      bindkey -M emacs "$terminfo[kcud1]" history-substring-search-down
-      bindkey -M viins "$terminfo[kcud1]" history-substring-search-down
-    fi
+        # Bind terminal-specific up and down keys
+        # Bind in both emacs and vi modes so it works in both, and is not
+        # sensitive to whether this is loaded before or after the vi-mode plugin
+        if [[ -n "$terminfo[kcuu1]" ]]; then
+            bindkey -M emacs "$terminfo[kcuu1]" history-substring-search-up
+            bindkey -M viins "$terminfo[kcuu1]" history-substring-search-up
+        fi
+        if [[ -n "$terminfo[kcud1]" ]]; then
+            bindkey -M emacs "$terminfo[kcud1]" history-substring-search-down
+            bindkey -M viins "$terminfo[kcud1]" history-substring-search-down
+        fi
 
 
-    # Local plugins
-    source ~/.dotfiles_root/zsh/plugins/env/env.plugin.zsh
+        # Local plugins
+        source ~/.dotfiles_root/zsh/plugins/env/env.plugin.zsh
 
-    if [ -d "$HOME/.zplug/bin" ]; then
-        export PATH="$PATH:$HOME/.zplug/bin"
+        if [ -d "$HOME/.zplug/bin" ]; then
+            export PATH="$PATH:$HOME/.zplug/bin"
+        fi
     fi
 fi
 

@@ -1,0 +1,83 @@
+# Load the oh-my-zsh's library.
+antigen use oh-my-zsh
+
+# Bundles from the default repo (robbyrussell's oh-my-zsh).
+antigen bundle robbyrussell/oh-my-zsh lib/history
+antigen bundle robbyrussell/oh-my-zsh lib/compfix
+antigen bundle robbyrussell/oh-my-zsh lib/completion
+antigen bundle robbyrussell/oh-my-zsh lib/correction
+antigen bundle robbyrussell/oh-my-zsh lib/key-bindings
+
+if which git >/dev/null; then
+    antigen bundle git
+    antigen bundle git-extras
+fi
+if which svn >/dev/null; then
+    antigen bundle svn
+fi
+if which fabric >/dev/null; then
+    antigen bundle fabric
+fi
+if which php >/dev/null; then
+    antigen bundle composer
+fi
+if which pip >/dev/null; then
+    antigen bundle pip
+fi
+
+# antigen bundle heroku
+# lein
+antigen bundle command-not-found
+antigen bundle python
+antigen bundle virtualenv
+antigen bundle httpie
+if which yarn >/dev/null; then
+    antigen bundle yarn
+fi
+if which rg >/dev/null; then
+    antigen bundle ripgrep
+fi
+antigen bundle jsontools
+
+antigen bundle ansible
+if which docker >/dev/null; then
+    antigen bundle docker
+    antigen bundle docker-compose
+fi
+if which kubectl >/dev/null; then
+    antigen bundle kubectl
+fi
+if which terraform >/dev/null; then
+    antigen bundle terraform
+fi
+
+antigen bundle django
+
+if [[ $OSTYPE == *darwin* ]]; then
+    antigen bundle robbyrussell/oh-my-zsh lib/clipboard
+fi
+
+# Syntax highlighting bundle.
+antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundle zsh-users/zsh-history-substring-search
+
+# Directory listings for zsh with git features
+# antigen bundle supercrabtree/k
+
+antigen bundle aperezdc/zsh-fzy
+
+antigen bundle b4b4r07/enhancd
+antigen bundle zsh-users/zaw
+
+# File navigation tool, alt+k
+antigen bundle Vifon/deer
+
+# Make mysql client use colors
+antigen bundle horosgrisa/mysql-colorize
+
+# Load the theme.
+# antigen theme robbyrussell
+antigen theme bira
+
+# Tell Antigen that you're done.
+antigen apply
