@@ -132,20 +132,6 @@ if ! shopt -oq posix; then
   fi
 fi
 
-# If we have a msys socket file install a proxy to translate between
-# the socket port and the local socket file
-SOCKETFILE="${MSYS_SOCKETFILE-$HOME/.msyslockfile}"
-if [[ -s $SOCKETFILE ]] && [[ -z $SSH_AUTH_SOCK ]]; then
-    SSH_AUTH_DIR=`mktemp --tmpdir -d ssh-auth-XXXXX`
-    export SSH_AUTH_SOCK="$SSH_AUTH_DIR/auth-sock"
-    export MSYS_PROXY_SOCKET_PID="$SSH_AUTH_DIR/proxy.pid"
-    # echo "Found msys socket file '$SOCKETFILE', activating proxy"
-    # echo "ssh auth socket: $SSH_AUTH_SOCK"
-    # echo "msys proxy pid: $MSYS_PROXY_SOCKET_PID"
-    "$HOME/.dotfiles_root/linux/msysgit2unix-socket.py" --pidfile="$MSYS_PROXY_SOCKET_PID" "$SOCKETFILE:$SSH_AUTH_SOCK" 2>/dev/null
-    trap "/bin/sh $HOME/.dotfiles_root/linux/msysgit2unix-socket-exit.sh $MSYS_PROXY_SOCKET_PID $SSH_AUTH_SOCK $SSH_AUTH_DIR $$" EXIT
-fi
-
 # Check if git config is correct
 if [[ -t 0 ]]; then
     if which git >/dev/null; then
