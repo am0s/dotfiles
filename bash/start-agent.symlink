@@ -1,0 +1,38 @@
+# -*- mode: bash -*-
+# code: language=shellscript insertSpaces=true tabSize=4
+# ~/.start-agent: sets up an ssh-agent if no ssh socket is present
+
+[[ -n "${SHELL_INIT_DEBUG-}" ]] && echo "ssh: checking ssh-agent"
+
+if [[ -z $SSH_AUTH_SOCK ]]; then
+    # If npiperelay.exe is available use it to pipe the windows ssh-agent to WSL
+    # Get it from https://github.com/jstarks/npiperelay
+    [[ -n "${SHELL_INIT_DEBUG-}" ]] && echo "ssh-agent: no existing agent socket, auto configuring"
+    if which npiperelay.exe >/dev/null; then
+        [[ -n "${SHELL_INIT_DEBUG-}" ]] && echo "ssh-agent: using npiperelay, using relay to window ssh-agent"
+        export SSH_AUTH_SOCK=$HOME/.ssh/agent.sock
+        export SSH_AGENT_MODE=npiperelay
+        if ! (ss -a | grep -q $SSH_AUTH_SOCK); then
+            [[ -n "${SHELL_INIT_DEBUG-}" ]] && echo "ssh-agent: starting relay to ssh-agent"
+            rm -f $SSH_AUTH_SOCK
+            mkdir -p `dirname $SSH_AUTH_SOCK`
+            ( setsid socat UNIX-LISTEN:$SSH_AUTH_SOCK,fork EXEC:"npiperelay.exe -ei -s //./pipe/openssh-ssh-agent",nofork & ) >/dev/null 2>&1
+            export SSH_AGENT_MODE=npiperelay-new
+        else
+            [[ -n "${SHELL_INIT_DEBUG-}" ]] && echo "ssh-agent: relay to ssh-agent already present"
+        fi
+    elif which keychain >/dev/null; then
+        [[ -n "${SHELL_INIT_DEBUG-}" ]] && echo "ssh-agent: using keychain"
+        # Use keychain to reuse ssh-agent across multiple logins
+        keychain -q
+        export SSH_AGENT_MODE=keychain
+    else
+        [[ -n "${SHELL_INIT_DEBUG-}" ]] && echo "ssh-agent: using ssh-agent, starting new agent"
+        # If not create normal ssh-agent
+        eval $(ssh-agent -s) >/dev/null
+        export SSH_AGENT_MODE=ssh-agent
+    fi
+else
+    [[ -n "${SHELL_INIT_DEBUG-}" ]] && echo "ssh-agent: using existing agent socket"
+    export SSH_AGENT_MODE=sock
+fi
