@@ -1,0 +1,6 @@
+# code: language=shellscript insertSpaces=true tabSize=4
+
+# Make sure a ssh socket is present, if not start an agent
+if [ -f "$HOME/.start-agent" ]; then
+    source "$HOME/.start-agent"
+fi
