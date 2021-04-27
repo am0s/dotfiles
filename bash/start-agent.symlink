@@ -24,7 +24,21 @@ if [[ -z $SSH_AUTH_SOCK ]]; then
     elif which keychain >/dev/null; then
         [[ -n "${SHELL_INIT_DEBUG-}" ]] && echo "ssh-agent: using keychain"
         # Use keychain to reuse ssh-agent across multiple logins
-        keychain -q
+        keys=""
+        if [[ -f "$HOME/.ssh/keys" ]]; then
+            while IFS= read -r key; do
+                key=${key/#%//}
+                if [[ -n "$key" ]]; then
+                    keys="$keys $HOME/.ssh/$key"
+                fi
+            done < "$HOME/.ssh/keys"
+        fi
+
+        if [[ -n "$keys" ]]; then
+            eval `keychain -q --eval $keys`
+        else
+            eval `keychain -q --eval`
+        fi
         export SSH_AGENT_MODE=keychain
     else
         [[ -n "${SHELL_INIT_DEBUG-}" ]] && echo "ssh-agent: using ssh-agent, starting new agent"
