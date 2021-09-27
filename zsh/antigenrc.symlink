@@ -51,7 +51,8 @@ if which terraform >/dev/null; then
     antigen bundle terraform
 fi
 
-antigen bundle django
+# The django plugin is deprecated in favor of Zsh's Django completion.
+# antigen bundle django
 
 if [[ $OSTYPE == *darwin* ]]; then
     antigen bundle robbyrussell/oh-my-zsh lib/clipboard
