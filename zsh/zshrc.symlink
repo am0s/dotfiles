@@ -308,7 +308,7 @@ if [[ -t 0 ]]; then
             if [[ -n "${USER_FULL_NAME-}" ]]; then
                 git_name="${USER_FULL_NAME}"
             else
-                git_name=`getent passwd $USER | cut -d":" -f5 | cut -d"," -f1`
+                git_name=`getent passwd $USER | cut -d":" -f5 | cut -d"," -f1 | head -n 1`
             fi
             vared -p "Name: " git_name
             if [[ -n $git_name ]]; then
