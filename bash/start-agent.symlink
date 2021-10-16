@@ -12,8 +12,8 @@ if [[ -z $SSH_AUTH_SOCK ]]; then
     # Get it from https://github.com/jstarks/npiperelay
     if [[ $SSH_AGENT_MODE = "auto" ]]; then
         [[ -n "${SHELL_INIT_DEBUG-}" ]] && echo "ssh-agent: no existing agent socket, auto configuring"
-        if which npiperelay.exe >/dev/null; then
-            [[ -n "${SHELL_INIT_DEBUG-}" ]] && echo "ssh-agent: found npiperelay.exe, switching to npiperelay"
+        if which npiperelay.exe >/dev/null && which socat >/dev/null; then
+            [[ -n "${SHELL_INIT_DEBUG-}" ]] && echo "ssh-agent: found npiperelay.exe (and socat), switching to npiperelay"
             export SSH_AGENT_MODE=npiperelay
         elif which keychain >/dev/null; then
             [[ -n "${SHELL_INIT_DEBUG-}" ]] && echo "ssh-agent: found keychain, switching to keychain"
