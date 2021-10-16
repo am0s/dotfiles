@@ -32,3 +32,5 @@ fi
 if [ -d "$HOME/.dotfiles/bin" ]; then
     export PATH="$HOME/.dotfiles/bin:PATH"
 fi
+
+export PATH="$HOME/.poetry/bin:$PATH"
