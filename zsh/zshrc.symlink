@@ -30,7 +30,7 @@ bindkey '\e[1~' beginning-of-line
 bindkey '\e[4~' end-of-line
 
 # Append extra bin folders to PATH
-export PATH="$HOME/.local/bin:$HOME/bin:$PATH:$HOME/.composer/vendor/bin:$HOME/.yarn/bin"
+export PATH="$HOME/.local/bin:$HOME/.poetry/bin:$HOME/bin:$PATH:$HOME/.composer/vendor/bin:$HOME/.yarn/bin"
 
 if [ -d "$HOME/dotfiles/bin" ]; then
     export PATH="$HOME/dotfiles/bin:PATH"
