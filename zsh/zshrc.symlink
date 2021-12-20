@@ -39,6 +39,23 @@ if [ -d "$HOME/.dotfiles/bin" ]; then
     export PATH="$HOME/.dotfiles/bin:PATH"
 fi
 
+# Kubernetes/Kubectl addons
+
+# istioctl
+# https://istio.io/latest/docs/setup/getting-started/
+
+if [ -d "$HOME/.istio/bin" ]; then
+    export PATH="$PATH:$HOME/.istio/bin"
+fi
+
+# kubectl krew
+# https://github.com/kubernetes-sigs/krew/
+
+if [ -d "$HOME/.krew/bin" ]; then
+    export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+fi
+
+
 # Make sure a ssh socket is present, if not start an agent
 if [ -f "$HOME/.start-agent" ]; then
     source "$HOME/.start-agent"
