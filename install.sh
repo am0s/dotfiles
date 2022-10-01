@@ -10,9 +10,44 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
     git config --local user.email jborsodi@gmail.com
 )
 
-# Check if dotfiles have been properly bootstrapped and installed
+INSTALL_DOTFILES=0
+NO_DOTFILES=0
+
+while getopts "hf" OPTION
+do
+   case $OPTION in
+       h)
+         # if -h, print help function and exit
+         echo "Dotfiles install script"
+         echo
+         echo "Options:"
+         echo " -f  Force (re)install"
+         echo " -h  Help"
+         exit -1
+         ;;
+       f)
+         INSTALL_DOTFILES=1
+         ;;
+       ?)
+         echo "ERROR: unknown options!! ABORT!!"
+         echo "Add -h option to see help"
+         exit -1
+         ;;
+     esac
+done
+
 if [[ ! -d $HOME/.dotfiles_root ]]; then
-    echo "No dotfiles have been installed"
+    INSTALL_DOTFILES=1
+    NO_DOTFILES=1
+fi
+
+# Check if dotfiles have been properly bootstrapped and installed
+if [ $INSTALL_DOTFILES -eq 1 ]; then
+    if [ $NO_DOTFILES -eq 1 ]; then
+        echo "No dotfiles have been installed"
+    else
+        echo "Re-installing dotfiles"
+    fi
     # Ask if interactive tty
     if [[ -t 0 ]]; then
         echo -n "Do you wish to install them now? [Y/n] "
