@@ -52,6 +52,6 @@ fi
 
 if [ $INSTALL_LEMONADE -eq 1 ]; then
   printf "  [ \033[00;34m..\033[0m ] Installing lemonade\n"
-  mkdir -p "~/.local/bin"
-  curl -L https://github.com/lemonade-command/lemonade/releases/download/v1.1.1/lemonade_linux_amd64.tar.gz | tar -x -z -C ~/.local/bin -f -
+  mkdir -p "$HOME/.local/bin"
+  curl -L https://github.com/lemonade-command/lemonade/releases/download/v1.1.1/lemonade_linux_amd64.tar.gz | tar -x -z -C $HOME/.local/bin -f -
 fi
