@@ -321,10 +321,10 @@ fi
 if [[ -t 0 ]]; then
     if which git >/dev/null; then
         if ! git config --global --get user.name >/dev/null; then
-            echo "No user name has been set in git config, please supply one"
             if [[ -n "${USER_FULL_NAME-}" ]]; then
                 git_name="${USER_FULL_NAME}"
             else
+                echo "No user name has been set in git config, please supply one"
                 git_name=`getent passwd $USER | cut -d":" -f5 | cut -d"," -f1 | head -n 1`
                 vared -p "Name: " git_name
             fi
@@ -335,11 +335,11 @@ if [[ -t 0 ]]; then
             fi
         fi
         if ! git config --global --get user.email >/dev/null; then
-            echo "No user email has been set in git config, please supply one"
             # If USER_PROJECT_EMAIL is set it used directly
             if [[ -n "${USER_PROJECT_EMAIL-}" ]]; then
                 git_email="${USER_PROJECT_EMAIL-}"
             else
+                echo "No user email has been set in git config, please supply one"
                 # If not fallback to USER_EMAIL and allow user to interactively edit it
                 git_email="${USER_EMAIL-}"
                 vared -p "E-mail: " git_email
