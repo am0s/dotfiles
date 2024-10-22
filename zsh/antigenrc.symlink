@@ -1,3 +1,4 @@
+# code: language=shellscript insertSpaces=true tabSize=4
 # Load the oh-my-zsh's library.
 antigen use oh-my-zsh
 
@@ -22,6 +23,7 @@ if which php >/dev/null; then
     antigen bundle composer
 fi
 if which pip >/dev/null; then
+    antigen bundle mattberther/zsh-pyenv
     antigen bundle pip
 fi
 
