@@ -18,6 +18,7 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 alias dc='docker-compose'
+alias dcv='docker-compose -f docker-compose.yml -f docker-compose.vscode.yml -f docker-compose.override.yml'
 alias fd='fdfind'
 
 # Add an "alert" alias for long running commands.  Use like so:
