@@ -23,9 +23,14 @@ if which php >/dev/null; then
     antigen bundle composer
 fi
 if which pip >/dev/null; then
-    antigen bundle mattberther/zsh-pyenv
+#    antigen bundle mattberther/zsh-pyenv
     antigen bundle pip
 fi
+
+# Pyenv
+# if [[ -n "$PYENV_ROOT" && -d "$PYENV_ROOT" ]]; then
+#     antigen bundle luismayta/zsh-pyenv
+# fi
 
 # antigen bundle heroku
 # lein

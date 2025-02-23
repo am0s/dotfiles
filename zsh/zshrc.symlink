@@ -358,7 +358,6 @@ if [[ -t 0 ]]; then
     fi
 fi
 
-
 if [ -f ~/.aliases ]; then
     . ~/.aliases
 fi
