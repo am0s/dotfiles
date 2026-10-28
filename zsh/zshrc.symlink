@@ -33,10 +33,10 @@ bindkey '\e[4~' end-of-line
 export PATH="$HOME/.local/bin:$HOME/.poetry/bin:$HOME/bin:$PATH:$HOME/.composer/vendor/bin:$HOME/.yarn/bin"
 
 if [ -d "$HOME/dotfiles/bin" ]; then
-    export PATH="$HOME/dotfiles/bin:PATH"
+    export PATH="$HOME/dotfiles/bin:$PATH"
 fi
 if [ -d "$HOME/.dotfiles/bin" ]; then
-    export PATH="$HOME/.dotfiles/bin:PATH"
+    export PATH="$HOME/.dotfiles/bin:$PATH"
 fi
 if [ -d "/usr/local/go/bin" ]; then
     export PATH="$PATH:/usr/local/go/bin"
